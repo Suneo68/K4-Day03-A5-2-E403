@@ -39,6 +39,10 @@ from prompts import (  # noqa: E402
     SAFE_FALLBACK_MESSAGE,
 )
 from providers import get_llm_provider  # noqa: E402
+from ai_levels.level4_autonomous_agent import (  # noqa: E402
+    DEFAULT_AUTONOMOUS_GOAL,
+    demo_autonomous_agent,
+)
 from tools import AVAILABLE_TOOLS  # noqa: E402
 
 
@@ -665,13 +669,26 @@ def run_all_react_tests(test_cases: list[dict], provider) -> list[dict]:
     return results
 
 
+def run_autonomous_demo(goal: str) -> dict:
+    """Chạy demo Autonomous Agent Level 4."""
+    print("\n--- DEMO: AUTONOMOUS AGENT ---")
+    result = demo_autonomous_agent(goal)
+    print("\n📊 TỔNG KẾT AUTONOMOUS AGENT — BONUS")
+    print(f"🎯 Goal            : {result['goal']}")
+    print(f"🏁 Status          : {result['status']}")
+    print(f"💬 Final Answer    : {result['answer']}")
+    print(f"📋 Plan steps      : {len(result['plan'])}")
+    print(f"💾 Memory entries  : {len(result['memory'])}")
+    return result
+
+
 def main() -> None:
-    """CLI entry point cho baseline, react hoặc all."""
+    """CLI entry point cho baseline, react, autonomous hoặc all."""
     mode = sys.argv[1].casefold() if len(sys.argv) > 1 else "all"
-    if mode not in {"baseline", "react", "all"}:
+    if mode not in {"baseline", "react", "autonomous", "bonus", "all"}:
         print(
-            "Cách dùng: python src/app.py [baseline|react|all] "
-            "[test_case_id]"
+            "Cách dùng: python src/app.py [baseline|react|autonomous|all] "
+            "[test_case_id|autonomous_goal]"
         )
         raise SystemExit(2)
 
@@ -690,7 +707,9 @@ def main() -> None:
     print(f"✅ Đã tải {len(tests)} Test Cases từ config/test_cases.json")
 
     selected_tests = tests
-    if len(sys.argv) > 2:
+    autonomous_goal = DEFAULT_AUTONOMOUS_GOAL
+
+    if mode in {"baseline", "react", "all"} and len(sys.argv) > 2:
         requested_case_id = sys.argv[2]
         selected_tests = [
             case
@@ -701,6 +720,8 @@ def main() -> None:
             print(f"Không tìm thấy Test Case #{requested_case_id}.")
             raise SystemExit(2)
         print(f"🎯 Chỉ chạy Test Case #{requested_case_id}")
+    elif mode in {"autonomous", "bonus"} and len(sys.argv) > 2:
+        autonomous_goal = " ".join(sys.argv[2:]).strip() or DEFAULT_AUTONOMOUS_GOAL
 
     if mode in {"baseline", "all"}:
         print("\n--- DEMO: CHATBOT BASELINE ---")
@@ -709,6 +730,9 @@ def main() -> None:
     if mode in {"react", "all"}:
         print("\n--- DEMO: REACT AGENT ---")
         run_all_react_tests(selected_tests, provider)
+
+    if mode in {"autonomous", "bonus"}:
+        run_autonomous_demo(autonomous_goal)
 
 
 if __name__ == "__main__":

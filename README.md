@@ -69,5 +69,20 @@ timeline
 
 ---
 
+### 🚀 6. BONUS DEMO — AUTONOMOUS AGENT
+
+Nếu nhóm muốn lấy điểm cộng Level 4, có thể chạy:
+
+```bash
+python src/app.py autonomous
+```
+
+Bonus demo này được thiết kế nhẹ cho bài lab:
+
+- Planning: tự dựng kế hoạch theo mục tiêu thuê phòng.
+- Memory: lưu lại kết quả từng bước và giả định đã dùng.
+- Self-evaluation: dừng an toàn nếu thiếu dữ liệu hoặc chưa có xác nhận booking.
+- Không cần deploy, chỉ cần trình diễn được luồng demo rõ ràng.
+
 > 🚀 **BẮT ĐẦU LÀM BÀI**:
 > Vui lòng mở sổ tay thực hành 👉 **[PHAN_CONG_CONG_VIEC.md](file:///c:/Users/Admin/Documents/VinUni/LabCoachVin/LabKeyCoach/Day-3-Lab-Chatbot-vs-react-agent-E402/docs/PHAN_CONG_CONG_VIEC.md)** để xem phân vai và checklist công việc cụ thể cho từng thành viên!

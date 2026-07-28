@@ -1,0 +1,21 @@
+flowchart TD
+    U["User Question"] --> D{"Question Type?"}
+
+    D -->|Simple / theory / direct Q&A| C["Chatbot Path"]
+    D -->|Complex / needs data / multi-step / tool use| R["ReAct Agent Path"]
+
+    C --> CP["Single LLM Call"]
+    CP --> CF["Final Answer"]
+
+    R --> RP["Thought -> Action -> Observation Loop"]
+    RP --> T["Call Tool from src/tools.py"]
+    T --> O["Receive Observation"]
+    O --> RP
+    RP --> RF["Final Answer with grounded evidence"]
+
+    CF --> END["Done"]
+    RF --> END
+
+    style C fill:#E8F4FF,stroke:#3B82F6,stroke-width:1px
+    style R fill:#FFF7E6,stroke:#F59E0B,stroke-width:1px
+    style END fill:#EAF7EA,stroke:#22C55E,stroke-width:1px
