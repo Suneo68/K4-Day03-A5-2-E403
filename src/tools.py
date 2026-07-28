@@ -427,29 +427,15 @@ AVAILABLE_TOOLS = {
 }
 
 
-# ---------------------------------------------------------------------------
-# LEGACY COMPATIBILITY
-# Chỉ giữ để app.py cũ không lỗi import trong lúc Role 4 đang tích hợp Mốc 3.
-# Hai hàm này không nằm trong AVAILABLE_TOOLS và Agent không được phép gọi.
-# ---------------------------------------------------------------------------
-def get_weather(location: str) -> str:
-    """Legacy stub của đề cũ, không phải Tool hợp lệ của đề 10."""
-    return _error(
-        "UNKNOWN_TOOL",
-        f"get_weather không thuộc đề tài tìm nhà (location={location!r}).",
-    )
-
-
-def search_flights(origin: str, destination: str) -> str:
-    """Legacy stub của đề cũ, không phải Tool hợp lệ của đề 10."""
-    return _error(
-        "UNKNOWN_TOOL",
-        "search_flights không thuộc đề tài tìm nhà "
-        f"(origin={origin!r}, destination={destination!r}).",
-    )
-
-
 if __name__ == "__main__":
+    import sys
+
+    if sys.stdout.encoding != "utf-8":
+        try:
+            sys.stdout.reconfigure(encoding="utf-8")
+        except Exception:
+            pass
+
     print("=== CHECKPOINT 3: SAFE TOOL SMOKE TEST ===")
     print(search_rentals("Cầu Giấy", 6_000_000))
     print(check_viewing_slots("CG101"))

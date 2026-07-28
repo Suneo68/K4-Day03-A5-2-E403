@@ -18,6 +18,13 @@ if sys.stdout.encoding != 'utf-8':
 
 load_dotenv()
 
+DEFAULT_GEMINI_MODEL = "gemini-3.1-flash-lite"
+UNAVAILABLE_GEMINI_MODELS_FOR_NEW_USERS = {
+    "gemini-2.5-flash",
+    "gemini-2.5-flash-lite",
+}
+
+
 class BaseLLMProvider:
     """Interface cơ sở cho tất cả các LLM Provider"""
     def generate(self, prompt: str, system_prompt: str = "") -> str:
@@ -28,7 +35,16 @@ class GeminiProvider(BaseLLMProvider):
     """Google Gemini Provider"""
     def __init__(self, api_key: str = None, model: str = None):
         self.api_key = api_key or os.getenv("GEMINI_API_KEY")
-        self.model_name = model or os.getenv("LLM_MODEL") or "gemini-2.5-flash"
+        requested_model = (
+            model
+            or os.getenv("LLM_MODEL")
+            or DEFAULT_GEMINI_MODEL
+        ).strip()
+        self.model_name = (
+            DEFAULT_GEMINI_MODEL
+            if requested_model in UNAVAILABLE_GEMINI_MODELS_FOR_NEW_USERS
+            else requested_model
+        )
         
     def generate(self, prompt: str, system_prompt: str = "") -> str:
         if not self.api_key or self.api_key == "your_gemini_api_key_here":
