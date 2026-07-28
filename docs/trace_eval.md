@@ -157,4 +157,4 @@ Mọi Tool đều được bọc bởi lớp `_safe_tool` và luôn trả về k
 làm `Observation`. Lỗi nghiệp vụ hoặc exception ngoài dự kiến không được làm
 ReAct Loop dừng đột ngột.
 
----
+---.
