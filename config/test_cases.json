@@ -1,32 +1,32 @@
 [
   {
     "id": 1,
-    "category": "🟢 Đơn giản (Chỉ cần LLM)",
-    "question": "Thủ đô của Việt Nam là gì?",
-    "expected_behavior": "Chatbot trả lời trực tiếp từ kiến thức có sẵn."
+    "category": "🟢 Đơn giản (Chỉ cần 1 Tool)",
+    "question": "Tìm cho tôi phòng trọ ở Quận Cầu Giấy, giá dưới 3 triệu.",
+    "expected_behavior": "Agent gọi tool search_properties('Quận Cầu Giấy', 3000000, 'phòng trọ') và trả về danh sách các phòng phù hợp."
   },
   {
     "id": 2,
-    "category": "🟢 Đơn giản (Chỉ cần LLM)",
-    "question": "Nêu 3 lời khuyên để học tốt lập trình.",
-    "expected_behavior": "Chatbot trả lời trực tiếp từ kiến thức có sẵn."
+    "category": "🟡 Multi-step (Cần gọi 2 Tools liên tiếp)",
+    "question": "Cho tôi xem chi tiết căn hộ mã CH123 và các giờ trống để xem nhà vào ngày mai.",
+    "expected_behavior": "Agent gọi tool get_property_details('CH123'), sau đó suy luận ngày mai và gọi tiếp tool check_viewing_slots('CH123', 'YYYY-MM-DD' của ngày mai) rồi tổng hợp câu trả lời."
   },
   {
     "id": 3,
-    "category": "🟡 Multi-step (Cần Tool)",
-    "question": "Thời tiết ở Hà Nội hôm nay thế nào và tôi nên mặc gì đi chơi?",
-    "expected_behavior": "Agent gọi tool get_weather('Hà Nội') rồi suy luận trang phục."
+    "category": "🟠 Dynamic Decision (Xử lý khi thiếu thông tin)",
+    "question": "Tôi muốn đặt lịch xem phòng P456 vào lúc 9h sáng ngày 05/08/2026.",
+    "expected_behavior": "Agent nhận ra thiếu thông tin 'customer_name' và chưa có xác nhận (confirmed). Agent không gọi book_viewing ngay mà hỏi lại người dùng để lấy tên và yêu cầu xác nhận."
   },
   {
     "id": 4,
-    "category": "🟡 Multi-step (Cần gọi 2 Tools)",
-    "question": "Kiểm tra vé máy bay từ TP.HCM đi Hà Nội ngày mai và dự báo thời tiết ở Hà Nội.",
-    "expected_behavior": "Agent gọi tool search_flights và get_weather để trả lời đầy đủ."
+    "category": "🔴 Edge Case (Bẫy tham số - Ngày quá khứ)",
+    "question": "Tôi muốn kiểm tra lịch trống của căn nhà mã N789 vào ngày 15/05/2020.",
+    "expected_behavior": "Tool check_viewing_slots báo lỗi ngày nằm trong quá khứ. Agent nhận được thông báo lỗi từ Tool và trả lời người dùng yêu cầu chọn một ngày trong tương lai."
   },
   {
     "id": 5,
-    "category": "🔴 Edge Case (Bẫy Guardrail)",
-    "question": "Tra cứu thời tiết ở thành phố Atlantis ngày 32/13/2026.",
-    "expected_behavior": "Tool báo lỗi tham số/thất bại, Guardrail ngắt sau 3 bước và trả về thông báo lịch sự."
+    "category": "🔴 Edge Case (Bẫy Guardrail - Xung đột đặt lịch)",
+    "question": "Xác nhận đặt lịch xem phòng CH123, ngày 10/08/2026 lúc 14:00, tên tôi là Nguyễn Văn A.",
+    "expected_behavior": "Agent gọi book_viewing. Tool trả về lỗi 'Khung giờ vừa được người khác đặt'. Agent xử lý lỗi duyên dáng, thông báo cho người dùng và đề xuất gọi lại check_viewing_slots để tìm giờ khác."
   }
 ]
